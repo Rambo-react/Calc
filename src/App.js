@@ -1,34 +1,78 @@
 
 import React, { useState } from 'react';
 import './App.css';
-// import DivideButton from './components/DivideButton';
-// import MinusButton from './components/MinusButton';
-// import MultiplyButton from './components/MultiplyButton';
-// import NumberButton from './components/NumberButton';
-// import PlusButton from './components/PlusButton';
+import Button from './components/Button';
+
 
 const App = () => {
 
-  const [result, setResult] = useState("");
+  const [result, setResult] = useState("0");
+  const [firstVal, setFirstVal] = useState("");
+  const [secondVal, setSecondVal] = useState(null);
+  const [history, setHistory] = useState([]);
+  const [lastButtonOperator, setLastButtonOperator] = useState(false);
 
   const handleClick = (e) => {
-    //условия
-    setResult( result.concat( e.target.innerHTML));
 
+    if (lastButtonOperator) {
+      setResult(e.target.innerHTML)
+      // setResult("0");
+    } else
+      if (result === "0") {
+        setResult(e.target.innerHTML)
+      } else {
+        setResult(result.concat(e.target.innerHTML));
+      }
+
+    setLastButtonOperator(false);
   }
 
   const clear = () => {
-    setResult("");
+    setResult("0");
   }
 
   const backspace = () => {
-    setResult(result.slice(0, -1)); // result.slice(0, result.length -1)
+    if (result.length === 1) {
+      setResult("0");
+    } else {
+      setResult(result.slice(0, -1)); // result.slice(0, result.length -1)
+    }
   }
 
   const calculate = () => {
     setResult(eval(result).toString());
   }
 
+  const operatorClick = (e) => {
+    debugger
+    if (!lastButtonOperator) {
+      debugger
+      let calcResult;
+      let oper = firstVal.slice(firstVal.length - 1, firstVal.length);
+      let numFirstVal = Number(firstVal.slice(0, -1));
+      let numSecondVal = Number(result);
+      switch (oper) {
+        case "+": calcResult = numFirstVal + numSecondVal; break;
+        case "-": calcResult = numFirstVal - numSecondVal; break;
+        case "*": calcResult = numFirstVal * numSecondVal; break;
+        case "/": calcResult = numFirstVal / numSecondVal; break;
+      }
+      debugger
+      if (oper !== "") {
+        setResult(String(calcResult));
+        debugger
+        setFirstVal(String(calcResult).concat(e.target.innerHTML));
+      } else {
+        setFirstVal(result.concat(e.target.innerHTML));
+      }
+      
+    } else {
+debugger
+      setFirstVal(result.concat(e.target.innerHTML));
+    }
+
+    setLastButtonOperator(true);
+  }
 
 
   return (
@@ -36,12 +80,35 @@ const App = () => {
 
       <div className="calculator">
 
-        
-          <input value={result} />
-        
+        <input value={firstVal} />
+        <input value={result} readOnly={true} />
+
 
         <div className="keyboard">
-          <button onClick={clear} className="buttonNum" id="clear">Clear</button>
+          <Button child={"Clear"} handleClick={clear} />
+          <Button child={"C"} handleClick={backspace} />
+          <Button child={"/"} handleClick={operatorClick} />
+          {/* <Button child={"/"} handleClick={handleClick} /> */}
+          <Button child={"7"} handleClick={handleClick} />
+          <Button child={"8"} handleClick={handleClick} />
+          <Button child={"9"} handleClick={handleClick} />
+          <Button child={"*"} handleClick={operatorClick} />
+          {/* <Button child={"*"} handleClick={handleClick} /> */}
+          <Button child={"4"} handleClick={handleClick} />
+          <Button child={"5"} handleClick={handleClick} />
+          <Button child={"6"} handleClick={handleClick} />
+          <Button child={"-"} handleClick={operatorClick} />
+          {/* <Button child={"-"} handleClick={handleClick} /> */}
+          <Button child={"1"} handleClick={handleClick} />
+          <Button child={"2"} handleClick={handleClick} />
+          <Button child={"3"} handleClick={handleClick} />
+          <Button child={"+"} handleClick={operatorClick} />
+          {/* <Button child={"+"} handleClick={handleClick} /> */}
+          <Button child={"0"} handleClick={handleClick} />
+          <Button child={"."} handleClick={handleClick} />
+          <Button child={"="} handleClick={calculate} />
+
+          {/* <button onClick={clear} className="buttonNum" id="clear">Clear</button>
           <button onClick={backspace} className="buttonNum" id="backspace">C</button>
           <button onClick={handleClick} className="buttonNum">/</button>
           <button onClick={handleClick} className="buttonNum">7</button>
@@ -58,19 +125,19 @@ const App = () => {
           <button onClick={handleClick} className="buttonNum">+</button>
           <button onClick={handleClick} className="buttonNum">0</button>
           <button onClick={handleClick} className="buttonNum">.</button>
-          <button onClick={calculate} className="buttonNum" id="equal">=</button>
+          <button onClick={calculate} className="buttonNum" id="equal">=</button> */}
         </div>
 
 
       </div>
-      <div className="historyBlock">
-      <div>History</div>
-      <div className="history">
+      {/* <div className="historyBlock">
+        <div>History</div>
+        <div className="history">
 
-       <div className="historyElement">2 +2 = 4</div> 
-      </div>
-        
-      </div>
+          <div className="historyElement">2 +2 = 4</div>
+        </div>
+
+      </div> */}
 
     </div>
   )
