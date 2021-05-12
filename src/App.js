@@ -8,19 +8,19 @@ const App = () => {
 
   const [result, setResult] = useState("0");
   const [firstVal, setFirstVal] = useState("");
-  const [secondVal, setSecondVal] = useState(null);
-  const [history, setHistory] = useState([]);
+  // const [secondVal, setSecondVal] = useState(null);
+  // const [history, setHistory] = useState([]);
   const [lastButtonOperator, setLastButtonOperator] = useState(false);
-  const [lastButtonDot, setLastButtonDot] = useState(false);
+  // const [lastButtonDot, setLastButtonDot] = useState(false);
   const [lastButtonEqual, setLastButtonEqual] = useState(false);
 
 
-//цифры
+  //цифры
   const handleClick = (e) => {
 
     if (lastButtonOperator) {
       setResult(e.target.innerHTML)
-      
+
     } else
       if (result === "0") {
         setResult(e.target.innerHTML)
@@ -47,12 +47,14 @@ const App = () => {
 
   //равно
   const calculate = (e) => {
-
+    debugger
     //если ничего нету
     if (firstVal === "") {
+      debugger
       setFirstVal(result.concat(e.target.innerHTML));
-    } else 
-    if (!lastButtonEqual) {
+
+    } else if (!lastButtonEqual) {
+      debugger
       let calcResult;
       let numFirstVal = Number(firstVal.slice(0, -1));
       let oper = firstVal.slice(firstVal.length - 1, firstVal.length);
@@ -64,20 +66,52 @@ const App = () => {
         case "*": calcResult = numFirstVal * numSecondVal; break;
         case "/": calcResult = numFirstVal / numSecondVal; break;
       }
-
+      debugger
       setFirstVal(firstVal + SecondVal + e.target.innerHTML);
       setResult(String(calcResult));
-      setLastButtonEqual(true);
+
     } else {
+      //ищем оператор 
+      let arrOperators = ["+", "-", "*", "/"];
+      let oper = "";
+      for (let index = 0; index < arrOperators.length; index++) {
+        //ищем со второго номера элемента, т.к может быть отрицательное число
+        if (firstVal.includes(arrOperators[index], 1)) { oper = arrOperators[index]; break; }
+      }
+      //если никакой оператор не найден, то
+      if (oper === "") {
+        //добавляем в историю , другие действия не требуются
+      } else {
+        let calcResult;
+        //ищем со второго номера элемента, т.к может быть отрицательное число
+        let FirstVal = firstVal.slice(firstVal.indexOf(oper, 1) + 1, -1);
+        let numFirstVal = Number(FirstVal);
+        let SecondVal = result;
+        let numSecondVal = Number(SecondVal);
+
+        switch (oper) {
+          case "+": calcResult = numSecondVal + numFirstVal; break;
+          case "-": calcResult = numSecondVal - numFirstVal; break;
+          case "*": calcResult = numSecondVal * numFirstVal; break;
+          case "/": calcResult = numSecondVal / numFirstVal; break;
+        }
+        debugger
+        setFirstVal(`${SecondVal}${oper}${FirstVal}=`);
+        setResult(String(calcResult));
+
+      }
 
     }
-    // if (firstVal.includes("=", result.length - 1)) {
+    setLastButtonEqual(true);
+    setLastButtonOperator(false);
 
-    }
 
-    // setResult(eval(result).toString());
+  }
 
-  
+
+
+
+
 
   //операторы
   const operatorClick = (e) => {
@@ -97,12 +131,13 @@ const App = () => {
         case "-": calcResult = numFirstVal - numSecondVal; break;
         case "*": calcResult = numFirstVal * numSecondVal; break;
         case "/": calcResult = numFirstVal / numSecondVal; break;
+        case "=": calcResult = numSecondVal; break;
       }
-      
-      if (oper !== "") {
+
+      if ((oper !== "") && (oper!=="=")) {
         debugger
         setResult(String(calcResult));
-        
+
         setFirstVal(String(calcResult).concat(e.target.innerHTML));
       } else {
         debugger
@@ -119,7 +154,7 @@ const App = () => {
 
   //разделитель целой и дробной части
   const dotButtonHandler = (e) => {
-    if (lastButtonOperator) {
+    if (lastButtonOperator || lastButtonEqual) {
       setResult("0.");
     } else
       if (!result.includes(".")) {
