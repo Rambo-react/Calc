@@ -57,7 +57,6 @@ const App = () => {
 
   //равно
   const calculate = (e) => {
-    debugger
     //если ничего нету
     if (firstVal === "") {
       
@@ -70,12 +69,13 @@ const App = () => {
 
     } else if (!lastButtonEqual && !firstVal.includes("=")) {
       //если строка не содержит "=" и последняя кнопка не равна "="
-      
-      let calcResult = 0;
+      let calcResult;
       let FirstVal = firstVal.slice(0, -1);
+      
       let numFirstVal = Number(FirstVal);
       let oper = firstVal.slice(firstVal.length - 1, firstVal.length);
       let SecondVal = result.includes(".", result.length - 1) ? result.slice(0, -1) : result;
+      
       let numSecondVal = Number(SecondVal);
       switch (oper) {
         case "+": calcResult = numFirstVal + numSecondVal; break;
@@ -83,6 +83,7 @@ const App = () => {
         case "*": calcResult = numFirstVal * numSecondVal; break;
         case "/": calcResult = numFirstVal / numSecondVal; break;
       }
+      if (calcResult !== undefined) {calcResult=Number(calcResult.toFixed(16))}
       
       setHistory([...history, [firstVal + SecondVal + e.target.innerHTML, String(calcResult)]]);
       setFirstVal(firstVal + SecondVal + e.target.innerHTML);
@@ -118,7 +119,7 @@ const App = () => {
           case "*": calcResult = numSecondVal * numFirstVal; break;
           case "/": calcResult = numSecondVal / numFirstVal; break;
         }
-        
+        if (calcResult !== undefined) {calcResult=Number(calcResult.toFixed(16))}
         setHistory([...history, [`${SecondVal}${oper}${FirstVal}=`, String(calcResult)]]);
         setFirstVal(`${SecondVal}${oper}${FirstVal}=`);
         setResult(String(calcResult));
@@ -131,9 +132,9 @@ const App = () => {
 
   //операторы
   const operatorClick = (e) => {
-    debugger
+
     if (!lastButtonOperator) {
-      debugger
+
       let calcResult;
       let oper = firstVal.slice(firstVal.length - 1, firstVal.length);
       let FirstVal = firstVal.slice(0, -1);
@@ -150,21 +151,21 @@ const App = () => {
         case "/": calcResult = numFirstVal / numSecondVal; break;
         case "=": calcResult = numSecondVal; break;
       }
-
+      //фиксим 0,1 и 0,2
+      if (calcResult !== undefined) {calcResult=Number(calcResult.toFixed(16))}
+            
       if ((oper !== "") && (oper !== "=")) {
-        debugger
+
         FirstVal = `${FirstVal}${oper}${SecondVal}=`;
         SecondVal = String(calcResult);
         setHistory([...history, [FirstVal ,SecondVal]]);
         setResult(String(calcResult));
         setFirstVal(String(calcResult).concat(e.target.innerHTML));
       } else {
-        debugger
         setFirstVal(SecondVal.concat(e.target.innerHTML));
       }
 
     } else {
-      debugger
       setFirstVal(result.concat(e.target.innerHTML));
     }
 
