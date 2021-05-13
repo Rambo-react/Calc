@@ -57,7 +57,7 @@ const App = () => {
 
   //равно
   const calculate = (e) => {
-    
+    debugger
     //если ничего нету
     if (firstVal === "") {
       
@@ -71,7 +71,7 @@ const App = () => {
     } else if (!lastButtonEqual && !firstVal.includes("=")) {
       //если строка не содержит "=" и последняя кнопка не равна "="
       
-      let calcResult;
+      let calcResult = 0;
       let FirstVal = firstVal.slice(0, -1);
       let numFirstVal = Number(FirstVal);
       let oper = firstVal.slice(firstVal.length - 1, firstVal.length);
@@ -101,8 +101,8 @@ const App = () => {
       if (oper === "") {
         //добавляем в историю , другие действия не требуются
         let SecondVal = result;
-        let FirstVal = firstVal;
-        
+        let FirstVal = `${result}=`;
+        setFirstVal(FirstVal); 
         setHistory([...history, [FirstVal, SecondVal]]);
       } else {
         let calcResult;
@@ -246,10 +246,6 @@ const App = () => {
   )
 
 }
-
-
-
-
 
 
 export default App;
