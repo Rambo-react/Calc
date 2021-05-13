@@ -10,7 +10,7 @@ const App = () => {
   const [result, setResult] = useState("0");
   const [firstVal, setFirstVal] = useState("");
   // const [secondVal, setSecondVal] = useState(null);
-  const [history, setHistory] = useState([ ["1+6=", "7"], ["2*2=", "4"]]);
+  const [history, setHistory] = useState([]);
   const [lastButtonOperator, setLastButtonOperator] = useState(false);
   // const [lastButtonDot, setLastButtonDot] = useState(false);
   const [lastButtonEqual, setLastButtonEqual] = useState(false);
@@ -57,17 +57,23 @@ const App = () => {
 
   //равно
   const calculate = (e) => {
-    debugger
+    
     //если ничего нету
     if (firstVal === "") {
-      debugger
-      setFirstVal(result.concat(e.target.innerHTML));
+      
+      let FirstVal = result.concat(e.target.innerHTML);
+      let SecondVal = result;
+      setHistory([...history, [FirstVal, SecondVal]]);
+      setFirstVal(FirstVal);
+      
+      
 
     } else if (!lastButtonEqual && !firstVal.includes("=")) {
       //если строка не содержит "=" и последняя кнопка не равна "="
-      debugger
+      
       let calcResult;
-      let numFirstVal = Number(firstVal.slice(0, -1));
+      let FirstVal = firstVal.slice(0, -1);
+      let numFirstVal = Number(FirstVal);
       let oper = firstVal.slice(firstVal.length - 1, firstVal.length);
       let SecondVal = result.includes(".", result.length - 1) ? result.slice(0, -1) : result;
       let numSecondVal = Number(SecondVal);
@@ -77,9 +83,11 @@ const App = () => {
         case "*": calcResult = numFirstVal * numSecondVal; break;
         case "/": calcResult = numFirstVal / numSecondVal; break;
       }
-      debugger
+      
+      setHistory([...history, [firstVal + SecondVal + e.target.innerHTML, String(calcResult)]]);
       setFirstVal(firstVal + SecondVal + e.target.innerHTML);
       setResult(String(calcResult));
+      
 
     } else {
       //ищем оператор 
@@ -92,6 +100,10 @@ const App = () => {
       //если никакой оператор не найден, то
       if (oper === "") {
         //добавляем в историю , другие действия не требуются
+        let SecondVal = result;
+        let FirstVal = firstVal;
+        
+        setHistory([...history, [FirstVal, SecondVal]]);
       } else {
         let calcResult;
         //ищем со второго номера элемента, т.к может быть отрицательное число
@@ -106,17 +118,15 @@ const App = () => {
           case "*": calcResult = numSecondVal * numFirstVal; break;
           case "/": calcResult = numSecondVal / numFirstVal; break;
         }
-        debugger
+        
+        setHistory([...history, [`${SecondVal}${oper}${FirstVal}=`, String(calcResult)]]);
         setFirstVal(`${SecondVal}${oper}${FirstVal}=`);
         setResult(String(calcResult));
 
       }
-
     }
     setLastButtonEqual(true);
     setLastButtonOperator(false);
-
-
   }
 
   //операторы
@@ -126,7 +136,8 @@ const App = () => {
       debugger
       let calcResult;
       let oper = firstVal.slice(firstVal.length - 1, firstVal.length);
-      let numFirstVal = Number(firstVal.slice(0, -1));
+      let FirstVal = firstVal.slice(0, -1);
+      let numFirstVal = Number(FirstVal);
 
       // let numSecondVal = Number(result);
       //если последняий символ разделитель дробной части, то просто откидываем его
@@ -140,10 +151,12 @@ const App = () => {
         case "=": calcResult = numSecondVal; break;
       }
 
-      if ((oper !== "") && (oper!=="=")) {
+      if ((oper !== "") && (oper !== "=")) {
         debugger
+        FirstVal = `${FirstVal}${oper}${SecondVal}=`;
+        SecondVal = String(calcResult);
+        setHistory([...history, [FirstVal ,SecondVal]]);
         setResult(String(calcResult));
-
         setFirstVal(String(calcResult).concat(e.target.innerHTML));
       } else {
         debugger
@@ -172,15 +185,19 @@ const App = () => {
   //плюс минус
   const plusMinus = () => {
     if (result !== "0") {
-      result.includes("-") ? setResult(result.replace("-" ,"")) : setResult("-".concat(result));
+      result.includes("-") ? setResult(result.replace("-", "")) : setResult("-".concat(result));
     }
   }
   //история
-  const historyHandle = () => {
- //после нажатия на дивку , значения переносятся в калькулятор
- 
-  }
+  const historyHandle = (el) => {
+    //после нажатия на дивку , значения переносятся в калькулятор
+    setFirstVal(el[0]);
+    setResult(el[1]);
 
+    setLastButtonEqual(true);
+    setLastButtonOperator(false);
+  }
+  
   return (
     <div className="App">
 
@@ -216,12 +233,12 @@ const App = () => {
         <div>History</div>
         <div className="history">
           {
-            history.map( (el, index) => { 
-              return <HistoryElement key={index} historyElement={el} historyHandle={historyHandle} />
-             } )
+            history.map((el, index) => {
+              return <HistoryElement key={index} historyElement={el} historyHandle={()=> {historyHandle(el)} } />
+            })
           }
-          
         </div>
+        <button onClick={() => { setHistory([]) }}>clear history</button>
 
       </div>
 
