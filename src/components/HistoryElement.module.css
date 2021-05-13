@@ -1,0 +1,16 @@
+input {
+    background-color: transparent;
+}
+
+.small {
+    font-size: 80%;
+    opacity: 0.8;
+}
+
+.historyElement {
+    background-color: transparent;
+}
+
+.historyElement:hover, input:hover {
+    background-color: rgb(104, 104, 104);
+}

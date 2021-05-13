@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import './App.css';
 import Button from './components/Button';
+import HistoryElement from './components/HistoryElement';
 
 
 const App = () => {
@@ -9,7 +10,7 @@ const App = () => {
   const [result, setResult] = useState("0");
   const [firstVal, setFirstVal] = useState("");
   // const [secondVal, setSecondVal] = useState(null);
-  // const [history, setHistory] = useState([]);
+  const [history, setHistory] = useState([ ["1+6=", "7"], ["2*2=", "4"]]);
   const [lastButtonOperator, setLastButtonOperator] = useState(false);
   // const [lastButtonDot, setLastButtonDot] = useState(false);
   const [lastButtonEqual, setLastButtonEqual] = useState(false);
@@ -18,7 +19,7 @@ const App = () => {
   //цифры
   const handleClick = (e) => {
 
-    if (lastButtonOperator) {
+    if (lastButtonOperator || lastButtonEqual) {
       setResult(e.target.innerHTML)
 
     } else
@@ -29,11 +30,20 @@ const App = () => {
       }
 
     setLastButtonOperator(false);
+    setLastButtonEqual(false);
   }
 
   //очистить
   const clear = () => {
     setResult("0");
+  }
+
+  //очистить всё
+  const clearAll = () => {
+    setResult("0");
+    setFirstVal("");
+    setLastButtonEqual(false);
+    setLastButtonOperator(false);
   }
 
   //удалить последний символ
@@ -53,7 +63,8 @@ const App = () => {
       debugger
       setFirstVal(result.concat(e.target.innerHTML));
 
-    } else if (!lastButtonEqual) {
+    } else if (!lastButtonEqual && !firstVal.includes("=")) {
+      //если строка не содержит "=" и последняя кнопка не равна "="
       debugger
       let calcResult;
       let numFirstVal = Number(firstVal.slice(0, -1));
@@ -108,11 +119,6 @@ const App = () => {
 
   }
 
-
-
-
-
-
   //операторы
   const operatorClick = (e) => {
     debugger
@@ -149,6 +155,7 @@ const App = () => {
       setFirstVal(result.concat(e.target.innerHTML));
     }
 
+    setLastButtonEqual(false);
     setLastButtonOperator(true);
   }
 
@@ -162,44 +169,61 @@ const App = () => {
       }
     setLastButtonOperator(false);
   }
+  //плюс минус
+  const plusMinus = () => {
+    if (result !== "0") {
+      result.includes("-") ? setResult(result.replace("-" ,"")) : setResult("-".concat(result));
+    }
+  }
+  //история
+  const historyHandle = () => {
+ //после нажатия на дивку , значения переносятся в калькулятор
+ 
+  }
 
   return (
     <div className="App">
 
       <div className="calculator">
-        <input value={firstVal} />
+        <input value={firstVal} readOnly={true} />
         <input value={result} readOnly={true} />
         <div className="keyboard">
-          <Button child={"Clear"} handleClick={clear} />
-          <Button child={"C"} handleClick={backspace} />
-          <Button child={"/"} handleClick={operatorClick} />
-          <Button child={"7"} handleClick={handleClick} />
-          <Button child={"8"} handleClick={handleClick} />
-          <Button child={"9"} handleClick={handleClick} />
-          <Button child={"*"} handleClick={operatorClick} />
-          <Button child={"4"} handleClick={handleClick} />
-          <Button child={"5"} handleClick={handleClick} />
-          <Button child={"6"} handleClick={handleClick} />
-          <Button child={"-"} handleClick={operatorClick} />
-          <Button child={"1"} handleClick={handleClick} />
-          <Button child={"2"} handleClick={handleClick} />
-          <Button child={"3"} handleClick={handleClick} />
-          <Button child={"+"} handleClick={operatorClick} />
-          <Button child={"0"} handleClick={handleClick} />
-          <Button child={"."} handleClick={dotButtonHandler} />
-          <Button child={"="} handleClick={calculate} />
+          <Button styles={["button"]} child={"C"} handleClick={clearAll} />
+          <Button styles={["button"]} child={"CE"} handleClick={clear} />
+          <Button styles={["button"]} child={"<="} handleClick={backspace} />
+          <Button styles={["button"]} child={"/"} handleClick={operatorClick} />
+          <Button styles={["button", "numButton"]} child={"7"} handleClick={handleClick} />
+          <Button styles={["button", "numButton"]} child={"8"} handleClick={handleClick} />
+          <Button styles={["button", "numButton"]} child={"9"} handleClick={handleClick} />
+          <Button styles={["button"]} child={"*"} handleClick={operatorClick} />
+          <Button styles={["button", "numButton"]} child={"4"} handleClick={handleClick} />
+          <Button styles={["button", "numButton"]} child={"5"} handleClick={handleClick} />
+          <Button styles={["button", "numButton"]} child={"6"} handleClick={handleClick} />
+          <Button styles={["button"]} child={"-"} handleClick={operatorClick} />
+          <Button styles={["button", "numButton"]} child={"1"} handleClick={handleClick} />
+          <Button styles={["button", "numButton"]} child={"2"} handleClick={handleClick} />
+          <Button styles={["button", "numButton"]} child={"3"} handleClick={handleClick} />
+          <Button styles={["button"]} child={"+"} handleClick={operatorClick} />
+          <Button styles={["button", "numButton"]} child={"+/-"} handleClick={plusMinus} />
+          <Button styles={["button", "numButton"]} child={"0"} handleClick={handleClick} />
+          <Button styles={["button", "numButton"]} child={"."} handleClick={dotButtonHandler} />
+          <Button styles={["button"]} child={"="} handleClick={calculate} />
         </div>
 
 
       </div>
-      {/* <div className="historyBlock">
+      <div className="historyBlock">
         <div>History</div>
         <div className="history">
-
-          <div className="historyElement">2 +2 = 4</div>
+          {
+            history.map( (el, index) => { 
+              return <HistoryElement key={index} historyElement={el} historyHandle={historyHandle} />
+             } )
+          }
+          
         </div>
 
-      </div> */}
+      </div>
 
     </div>
   )
