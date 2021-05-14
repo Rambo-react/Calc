@@ -4,7 +4,7 @@ const HistoryElement = (props) => {
 
 
     return (
-        <div className={style.historyElement} onClick={props.historyHandle}>
+        <div className={style.historyElement} onClick={()=> {props.historyHandle(props.historyElement)}}>
             <input className={style.small} readOnly={true} value={props.historyElement[0]} />
             <input readOnly={true} value={props.historyElement[1]} />
         </div>

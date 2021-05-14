@@ -46,7 +46,7 @@ button {
   border-radius: 10px;
   
   color: honeydew;
-  cursor: pointer;
+  /* cursor: pointer; */
   background-color: transparent;
   /* opacity: 0.3; */
 }
@@ -88,5 +88,14 @@ button:focus,
 button:active {
   outline:none;
 
+}
+.clearHistory {
+
+  width: 52px;
+  height: 52px;
+  border-radius: 0px;
+  background-image: url("https://icons.iconarchive.com/icons/custom-icon-design/mono-general-4/48/trash-icon.png");
+  background-repeat: no-repeat;
+  
 }
  
