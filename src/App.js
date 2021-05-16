@@ -9,14 +9,14 @@ const App = () => {
 
   const [result, setResult] = useState("0");
   const [firstVal, setFirstVal] = useState("");
-  const [history, setHistory] = useState([]);
+  const [historyArray, setHistory] = useState([]);
   const [lastButtonOperator, setLastButtonOperator] = useState(false);
   const [lastButtonEqual, setLastButtonEqual] = useState(false);
-  
+
 
   //цифры
   const handleClick = (e) => {
-
+    if (result.length<16) {
     if (lastButtonOperator || lastButtonEqual) {
       setResult(e.target.innerHTML)
 
@@ -29,6 +29,7 @@ const App = () => {
 
     setLastButtonOperator(false);
     setLastButtonEqual(false);
+  }
   }
 
   //очистить
@@ -63,7 +64,7 @@ const App = () => {
       let FirstVal = result.concat(e.target.innerHTML);
       let SecondVal = result;
       setFirstVal(FirstVal);
-      setHistory([...history, [FirstVal, SecondVal]]);
+      setHistory([...historyArray, [FirstVal, SecondVal]]);
 
     } else if (!lastButtonEqual && !firstVal.includes("=")) {
       //если строка не содержит "=" и последняя кнопка не равна "="
@@ -82,7 +83,7 @@ const App = () => {
       if (calcResult !== undefined) { calcResult = Number(calcResult.toFixed(16)) }
       setResult(String(calcResult));
       setFirstVal(firstVal + SecondVal + e.target.innerHTML);
-      setHistory([...history, [firstVal + SecondVal + e.target.innerHTML, String(calcResult)]]);
+      setHistory([...historyArray, [firstVal + SecondVal + e.target.innerHTML, String(calcResult)]]);
     } else {
       //ищем оператор 
       let arrOperators = ["+", "-", "*", "/"];
@@ -97,7 +98,7 @@ const App = () => {
         let SecondVal = result;
         let FirstVal = `${result}=`;
         setFirstVal(FirstVal);
-        setHistory([...history, [FirstVal, SecondVal]]);
+        setHistory([...historyArray, [FirstVal, SecondVal]]);
       } else {
         let calcResult;
         //ищем со второго номера элемента, т.к может быть отрицательное число
@@ -115,7 +116,7 @@ const App = () => {
         if (calcResult !== undefined) { calcResult = Number(calcResult.toFixed(16)) }
         setResult(String(calcResult));
         setFirstVal(`${SecondVal}${oper}${FirstVal}=`);
-        setHistory([...history, [`${SecondVal}${oper}${FirstVal}=`, String(calcResult)]]);
+        setHistory([...historyArray, [`${SecondVal}${oper}${FirstVal}=`, String(calcResult)]]);
 
       }
     }
@@ -152,7 +153,7 @@ const App = () => {
         SecondVal = String(calcResult);
         setResult(String(calcResult));
         setFirstVal(String(calcResult).concat(e.target.innerHTML));
-        setHistory([...history, [FirstVal, SecondVal]]);
+        setHistory([...historyArray, [FirstVal, SecondVal]]);
       } else {
         setFirstVal(SecondVal.concat(e.target.innerHTML));
       }
@@ -188,47 +189,51 @@ const App = () => {
     setLastButtonEqual(true);
   }
 
-  let historyElements = history.map((el, index) => {
+  const onKeyPressed = (e) => {
+    console.log(e.key)
+  }
+
+  let historyElements = historyArray.map((el, index) => {
     return <HistoryElement key={index} historyElement={el} historyHandle={historyHandle} />
   });
 
   return (
     <div className="App">
-
       <div className="calculator">
-        <input value={firstVal} readOnly={true} />
-        <input value={result} readOnly={true} />
-        <div className="keyboard">
-          <Button styles={["button"]} child={"C"} handleClick={clearAll} />
-          <Button styles={["button"]} child={"CE"} handleClick={clear} />
-          <Button styles={["button"]} child={"<="} handleClick={backspace} />
-          <Button styles={["button"]} child={"/"} handleClick={operatorClick} />
-          <Button styles={["button", "numButton"]} child={"7"} handleClick={handleClick} />
-          <Button styles={["button", "numButton"]} child={"8"} handleClick={handleClick} />
-          <Button styles={["button", "numButton"]} child={"9"} handleClick={handleClick} />
-          <Button styles={["button"]} child={"*"} handleClick={operatorClick} />
-          <Button styles={["button", "numButton"]} child={"4"} handleClick={handleClick} />
-          <Button styles={["button", "numButton"]} child={"5"} handleClick={handleClick} />
-          <Button styles={["button", "numButton"]} child={"6"} handleClick={handleClick} />
-          <Button styles={["button"]} child={"-"} handleClick={operatorClick} />
-          <Button styles={["button", "numButton"]} child={"1"} handleClick={handleClick} />
-          <Button styles={["button", "numButton"]} child={"2"} handleClick={handleClick} />
-          <Button styles={["button", "numButton"]} child={"3"} handleClick={handleClick} />
-          <Button styles={["button"]} child={"+"} handleClick={operatorClick} />
-          <Button styles={["button", "numButton"]} child={"+/-"} handleClick={plusMinus} />
-          <Button styles={["button", "numButton"]} child={"0"} handleClick={handleClick} />
-          <Button styles={["button", "numButton"]} child={"."} handleClick={dotButtonHandler} />
-          <Button styles={["button"]} child={"="} handleClick={calculate} />
+        <div className="calcBlock">
+          <input className="firstVal" value={firstVal} readOnly={true} />
+          <input className="result" value={result} readOnly={true} type="text"/>
         </div>
-
+        <div className="keyboard">
+          <Button  child={"C"} handleClick={clearAll} />
+          <Button  child={"CE"} handleClick={clear} />
+          <Button  child={"backspace"} handleClick={backspace} />
+          <Button  child={"/"} handleClick={operatorClick} />
+          <Button   onKeyDown={onKeyPressed} child={"7"} handleClick={handleClick} />
+          <Button  child={"8"} handleClick={handleClick} />
+          <Button  child={"9"} handleClick={handleClick} />
+          <Button  child={"*"} handleClick={operatorClick} />
+          <Button  child={"4"} handleClick={handleClick} />
+          <Button  child={"5"} handleClick={handleClick} />
+          <Button  child={"6"} handleClick={handleClick} />
+          <Button  child={"-"} handleClick={operatorClick} />
+          <Button  child={"1"} handleClick={handleClick} />
+          <Button  child={"2"} handleClick={handleClick} />
+          <Button  child={"3"} handleClick={handleClick} />
+          <Button  child={"+"} handleClick={operatorClick} />
+          <Button  child={"+/-"} handleClick={plusMinus} />
+          <Button  child={"0"} handleClick={handleClick} />
+          <Button  child={"."} handleClick={dotButtonHandler} />
+          <Button  child={"="} handleClick={calculate} />
+        </div>
       </div>
       <div className="historyBlock">
-        <div>History</div>
+        <div><p className="titleHistory">History</p></div>
         <div className="history">
           {historyElements}
         </div>
-        <button className="clearHistory" onClick={() => { setHistory([]) }}></button>
-
+        {historyArray.length === 0 || <button className="clearHistory" title="Clear all history" onClick={() => { setHistory([]) }}></button> }
+      
       </div>
 
     </div>

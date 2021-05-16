@@ -1,17 +1,32 @@
 input {
     background-color: transparent;
+    padding-right: 10px;
+    width: 280px;
 }
 
-.small {
-    font-size: 80%;
-    opacity: 0.8;
+.firstValHistory {
+  opacity: 0.6;
+  font-size: 60%;
+  font-weight: 300;
 }
 
 .historyElement {
-    border: 1px solid black;
+    border: 0px;
+    margin-bottom: 10px;
     background-color: transparent;
 }
 
-.historyElement:hover, input:hover {
+.inputHistory {
+    margin-top: 0px;
+}
+
+.historyElement:hover {
     background-color: rgb(104, 104, 104);
+}
+
+input:focus,
+input:active,
+button:focus,
+button:active {
+  outline:none;
 }

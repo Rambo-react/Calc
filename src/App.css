@@ -1,101 +1,145 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;800&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200;300;400;500;600;700&display=swap');
 
 * {
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Oswald', sans-serif;
   font-size: x-large;
 }
 
 body {
-  
-  
   align-items: center;
   font-size: 14px;
-  /* background-color: black; */
 }
 
 .App {
   margin-top: 50px;
-  display: grid;
+  display:flex;
   align-items: center;
   justify-content: center;
-  grid-row: 2;
 }
 
 /* ====================================  CALC */
 .calculator {
+  height: 400px;
   width: 350px;
-  background-color: rgb(104, 104, 104);
+  background-color: rgb(31, 31, 31);
 }
 
+/* ====================================  CALCBLOCK */
+.calcBlock {
+  height: 120px;
+  text-align: right;
+  padding-right: 2px;
+  }
+
+input {
+  padding: 0px;
+  margin-top: 5px;
+  width: 350px;
+  border: 0px;
+  color:white;
+  text-align: right;
+  letter-spacing: 1px;
+}
+
+.firstVal {
+  opacity: 0.6;
+  font-size: 60%;
+  font-weight: 300;
+}
+
+.result {
+    font-size: 150%;
+  }
+
+/* ====================================  KEYBOARD */
 .keyboard {
+  padding: 2px;
   display:grid;
   grid-template-columns: repeat(4, 1fr); /*1fr 1fr 1fr 1fr */
   grid-auto-rows: minmax(55px , auto);
 }
 
-input {
-  height: 55px;
-  border: 0px;
-    color: lightyellow;
-    background-color:  rgb(104, 104, 104);
-    text-align: right;
-    letter-spacing: 1px;
-}
-
-button {
-  border-radius: 10px;
-  
-  color: honeydew;
-  /* cursor: pointer; */
-  background-color: transparent;
-  /* opacity: 0.3; */
-}
-
-#clear {
-  grid-column: 1/3;
-  grid-row: 1;
-}
-
-#equal {
-  grid-column: 3/5;
-  grid-row: 5;
-}
-
-button:hover {
-  background-color: lightslategrey;
-  /* opacity: 1; */
-}
 
 /* ====================================  HISTORY */
-.history {
-  width: 250px;
-  
-  text-align: right;
-  display:grid;
-}
-
 .historyBlock{
-  background-color: lightslategrey;
+  position: relative;
+  height: 400px;
+  width: 300px;
+  background-color: rgb(31, 31, 31);
+}
+.titleHistory {
+  font-size: 90%;
+  text-decoration: underline;
+  text-decoration-color: rgb(19, 67, 105);
+  margin: 5px;
+  color: white;
 }
 
-/* .historyElement {
-
-} */
-
-input:focus,
-input:active,
-button:focus,
-button:active {
-  outline:none;
-
+.history {
+  height: 320px;
+  /* overflow: hidden; */
+  overflow-y: auto;
+  text-align: right;
+  /* display:grid; */
 }
+
 .clearHistory {
-
-  width: 52px;
-  height: 52px;
+  position:absolute;
+  right: 2px;
+  bottom: 2px;
+  /* vertical-align: bottom; */
+  width: 32px;
+  height: 32px;
+  background-color: transparent;
   border-radius: 0px;
-  background-image: url("https://icons.iconarchive.com/icons/custom-icon-design/mono-general-4/48/trash-icon.png");
+  background-image: url("../src/common/recycle_bin_white_32px.png");
   background-repeat: no-repeat;
   
 }
  
+
+
+/* полоса прокрутки (скроллбар) */
+/*высота для горизонтального скролла */
+/* ширина для вертикального скролла */
+::-webkit-scrollbar {
+  width: 10px; 
+  /* height: 0px;  */
+  /* background-color: #143861; */
+}
+
+/* ползунок скроллбара */
+::-webkit-scrollbar-thumb {
+  background-color: rgb(120, 120, 120);
+  /* box-shadow: inset 1px 1px 10px #f3faf7; */
+}
+
+/* ширина для вертикального скролла */
+::-webkit-scrollbar:hover {
+  /* width: 0px;  */
+  /* background-color: salmon; */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #5f6675;
+  }
+
+/* Стрелки */
+
+::-webkit-scrollbar-button:vertical:start:decrement {
+  background: linear-gradient(120deg, #02141a 40%, rgba(0, 0, 0, 0) 41%),
+  linear-gradient(240deg, #02141a 40%, rgba(0, 0, 0, 0) 41%),
+  linear-gradient(0deg, #02141a 30%, rgba(0, 0, 0, 0) 31%);
+  background-color: #f6f8f4;
+}
+
+::-webkit-scrollbar-button:vertical:end:increment {
+  background:
+      linear-gradient(300deg, #02141a 40%, rgba(0, 0, 0, 0) 41%),
+      linear-gradient(60deg, #02141a 40%, rgba(0, 0, 0, 0) 41%),
+      linear-gradient(180deg, #02141a 30%, rgba(0, 0, 0, 0) 31%);
+  background-color: #f6f8f4;
+}
+
+
