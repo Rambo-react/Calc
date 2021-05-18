@@ -18,11 +18,14 @@ const App = () => {
 
   useEffect(()=>{
     let fn =(e) => {
-      if (e.key === "7") {
-        // console.log(e)
-        handleClickNum(e.key)
+      switch(e.key) {
+        case (Boolean(e.key.match(/[0-9]/)) && e.key) : handleClickNum(e.key); break;
+        case "Backspace" : backspace(); break;
+        case "Delete" : clearAll(); break;
+        case "=" : calculate(); break;
+        default:console.log(e.key); break;
       }
-
+     
       
 
     }
@@ -34,25 +37,26 @@ const App = () => {
     
   //цифры
   const handleClickNum = (e) => {
-     debugger
+     
     if (result.length<16) {
     if (lastButtonOperator || lastButtonEqual) {
       setResult(e)
-      debugger
-    } else
+      
+    } else {
+      setResult((result) => {
       if (result === "0") {
-        debugger
-        setResult(e)
-        debugger
+        return e;
       } else {
-        setResult(result.concat(e));
-        debugger
+        return result.concat(e);
       }
+    })
 
-    setLastButtonOperator(false);
-    setLastButtonEqual(false);
   }
-  }
+
+  setLastButtonOperator(false);
+  setLastButtonEqual(false);
+}
+}
   // debugger
 
   //очистить
@@ -73,7 +77,7 @@ const App = () => {
     if (result.length === 1) {
       setResult("0");
     } else {
-      setResult(result.slice(0, -1)); // result.slice(0, result.length -1)
+      setResult((result) => { return result.slice(0, -1)} ); // result.slice(0, result.length -1)
     }
   }
 
