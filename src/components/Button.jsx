@@ -1,6 +1,7 @@
+import React from 'react'
 import style from './Button.module.css'
 
-const Button = (props) => {
+const Button =(props) => {
   // debugger
   let styles;
   switch (props.child) {
@@ -17,7 +18,7 @@ const Button = (props) => {
   }
   // let stylesButton = "styles." + props.styles.join(' styles.')  
   return (
-            <button onClick={props.handleClick} className={styles}>{props.child === "backspace" ? "" : props.child}</button>
+            <button onClick={() => { props.handleClick(props.child) }  } className={styles}>{props.child === "backspace" ? "" : props.child}</button>
       )
   }
 // `${style.button} ${style.numButton}`

@@ -1,11 +1,12 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 import Button from './components/Button';
 import HistoryElement from './components/HistoryElement';
 
 
 const App = () => {
+
 
   const [result, setResult] = useState("0");
   const [firstVal, setFirstVal] = useState("");
@@ -14,23 +15,45 @@ const App = () => {
   const [lastButtonEqual, setLastButtonEqual] = useState(false);
 
 
+
+  useEffect(()=>{
+    let fn =(e) => {
+      if (e.key === "7") {
+        // console.log(e)
+        handleClickNum(e.key)
+      }
+
+      
+
+    }
+
+    document.addEventListener('keydown', fn)
+
+    return () => document.removeEventListener('keydown', fn)
+  },[])
+    
   //цифры
-  const handleClick = (e) => {
+  const handleClickNum = (e) => {
+     debugger
     if (result.length<16) {
     if (lastButtonOperator || lastButtonEqual) {
-      setResult(e.target.innerHTML)
-
+      setResult(e)
+      debugger
     } else
       if (result === "0") {
-        setResult(e.target.innerHTML)
+        debugger
+        setResult(e)
+        debugger
       } else {
-        setResult(result.concat(e.target.innerHTML));
+        setResult(result.concat(e));
+        debugger
       }
 
     setLastButtonOperator(false);
     setLastButtonEqual(false);
   }
   }
+  // debugger
 
   //очистить
   const clear = () => {
@@ -189,9 +212,6 @@ const App = () => {
     setLastButtonEqual(true);
   }
 
-  const onKeyPressed = (e) => {
-    console.log(e.key)
-  }
 
   let historyElements = historyArray.map((el, index) => {
     return <HistoryElement key={index} historyElement={el} historyHandle={historyHandle} />
@@ -201,28 +221,28 @@ const App = () => {
     <div className="App">
       <div className="calculator">
         <div className="calcBlock">
-          <input className="firstVal" value={firstVal} readOnly={true} />
-          <input className="result" value={result} readOnly={true} type="text"/>
+          <input className="firstVal" value={firstVal} readOnly={true}  />
+          <input className="result" value={result} readOnly={true} type="text" onKeyDown={handleClickNum}/>
         </div>
         <div className="keyboard">
           <Button  child={"C"} handleClick={clearAll} />
           <Button  child={"CE"} handleClick={clear} />
           <Button  child={"backspace"} handleClick={backspace} />
           <Button  child={"/"} handleClick={operatorClick} />
-          <Button   onKeyDown={onKeyPressed} child={"7"} handleClick={handleClick} />
-          <Button  child={"8"} handleClick={handleClick} />
-          <Button  child={"9"} handleClick={handleClick} />
+          <Button  child={"7"} handleClick={handleClickNum} />
+          <Button  child={"8"} handleClick={handleClickNum} />
+          <Button  child={"9"} handleClick={handleClickNum} />
           <Button  child={"*"} handleClick={operatorClick} />
-          <Button  child={"4"} handleClick={handleClick} />
-          <Button  child={"5"} handleClick={handleClick} />
-          <Button  child={"6"} handleClick={handleClick} />
+          <Button  child={"4"} handleClick={handleClickNum} />
+          <Button  child={"5"} handleClick={handleClickNum} />
+          <Button  child={"6"} handleClick={handleClickNum} />
           <Button  child={"-"} handleClick={operatorClick} />
-          <Button  child={"1"} handleClick={handleClick} />
-          <Button  child={"2"} handleClick={handleClick} />
-          <Button  child={"3"} handleClick={handleClick} />
+          <Button  child={"1"} handleClick={handleClickNum} />
+          <Button  child={"2"} handleClick={handleClickNum} />
+          <Button  child={"3"} handleClick={handleClickNum} />
           <Button  child={"+"} handleClick={operatorClick} />
           <Button  child={"+/-"} handleClick={plusMinus} />
-          <Button  child={"0"} handleClick={handleClick} />
+          <Button  child={"0"} handleClick={handleClickNum} />
           <Button  child={"."} handleClick={dotButtonHandler} />
           <Button  child={"="} handleClick={calculate} />
         </div>
