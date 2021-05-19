@@ -7,7 +7,7 @@ const Button =(props) => {
   switch (props.child) {
     case "=" : styles=`${style.equal}`
      break;
-    case "backspace" : styles=`${style.backspace}`
+    case "Backspace" : styles=`${style.backspace}`
      break;
      //если не найдёт строку из рег. выражения , то выдаст булевое знаение, а оно не может быть в props.child, по этому класс не добавится
     case Boolean(props.child.match(/[0-9.]/)) && props.child : styles=`${style.numButton}`  
@@ -19,7 +19,7 @@ const Button =(props) => {
   }
   // let stylesButton = "styles." + props.styles.join(' styles.')  
   return (
-            <button onClick={ props.child.match(/[0-9]/) ? () => { props.handleClick(props.child) } : props.handleClick } className={styles}>{props.child === "backspace" ? "" : props.child}</button>
+            <button id={props.child} onClick={ props.child.match(/[0-9]/) ? () => { props.handleClick(props.child) } : props.handleClick } className={styles}>{props.child === "Backspace" ? "" : props.child}</button>
       )
   }
 // `${style.button} ${style.numButton}`

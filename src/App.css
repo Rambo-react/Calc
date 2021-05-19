@@ -35,7 +35,7 @@ body {
 input {
   padding: 0px;
   margin-top: 5px;
-  width: 350px;
+  /* width: 350px; */
   border: 0px;
   color:white;
   text-align: right;
@@ -43,12 +43,14 @@ input {
 }
 
 .firstVal {
+  width: 340px;
   opacity: 0.6;
   font-size: 60%;
   font-weight: 300;
 }
 
 .result {
+  width: 340px;
     font-size: 150%;
   }
 

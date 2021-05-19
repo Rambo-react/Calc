@@ -18,16 +18,15 @@ const App = () => {
 
   useEffect(()=>{
     let fn =(e) => {
+      let arrKeys = ["Backspace" , "=" , "+" , "-" , "/" , "*", "."]
       switch(e.key) {
-        case (Boolean(e.key.match(/[0-9]/)) && e.key) : handleClickNum(e.key); break;
-        case "Backspace" : backspace(); break;
-        case "Delete" : clearAll(); break;
-        case "=" : calculate(); break;
-        default:console.log(e.key); break;
+        // case (Boolean(e.key.match(/[0-9]/)) && e.key) : handleClickNum(e.key); break;
+        case (Boolean(e.key.match(/[0-9]/)) && e.key) : document.getElementById(e.key).click(); break;
+        case arrKeys.some(x => x === e.key) ? e.key : false: document.getElementById(e.key).click(); break;
+        case "Enter" : document.getElementById("=").click(); break;
+        case "Delete": document.getElementById("C").click(); break;
+        default: break;
       }
-     
-      
-
     }
 
     document.addEventListener('keydown', fn)
@@ -37,25 +36,39 @@ const App = () => {
     
   //цифры
   const handleClickNum = (e) => {
-     
-    if (result.length<16) {
+    debugger 
+    
     if (lastButtonOperator || lastButtonEqual) {
       setResult(e)
+      setLastButtonOperator(false);
+      setLastButtonEqual(false);
+    } 
+    else {
       
-    } else {
-      setResult((result) => {
       if (result === "0") {
-        return e;
-      } else {
-        return result.concat(e);
+        setResult(e);
+        setLastButtonOperator(false);
+        setLastButtonEqual(false);
+      } else  if (result.length<18) {
+        setResult(result.concat(e)) ;
+        setLastButtonOperator(false);
+        setLastButtonEqual(false);
       }
-    })
+    
 
   }
+  //   else {
+  //     setResult((result) => {
+  //     if (result === "0") {
+  //       return e;
+  //     } else  if (result.length<18) {
+  //       return result.concat(e);
+  //     }
+  //   })
 
-  setLastButtonOperator(false);
-  setLastButtonEqual(false);
-}
+  // }
+  
+
 }
   // debugger
 
@@ -107,7 +120,17 @@ const App = () => {
         case "*": calcResult = numFirstVal * numSecondVal; break;
         case "/": calcResult = numFirstVal / numSecondVal; break;
       }
-      if (calcResult !== undefined) { calcResult = Number(calcResult.toFixed(16)) }
+      if (calcResult !== undefined) { 
+        calcResult = Number(calcResult.toFixed(16));
+        // debugger
+        // if (String(calcResult).includes(".")) {
+        //   let countNumbers = String(Math.trunc(calcResult)).length;
+        // calcResult = Number(calcResult.toFixed(16-countNumbers));
+        // }
+         
+      }
+
+
       setResult(String(calcResult));
       setFirstVal(firstVal + SecondVal + e.target.innerHTML);
       setHistory([...historyArray, [firstVal + SecondVal + e.target.innerHTML, String(calcResult)]]);
@@ -140,7 +163,16 @@ const App = () => {
           case "*": calcResult = numSecondVal * numFirstVal; break;
           case "/": calcResult = numSecondVal / numFirstVal; break;
         }
-        if (calcResult !== undefined) { calcResult = Number(calcResult.toFixed(16)) }
+        if (calcResult !== undefined) { 
+          calcResult = Number(calcResult.toFixed(16));
+          // debugger
+          // if (String(calcResult).includes(".")) {
+          //   let countNumbers = String(Math.trunc(calcResult)).length;
+          // calcResult = Number(calcResult.toFixed(16-countNumbers));
+          // }
+           
+        }
+  
         setResult(String(calcResult));
         setFirstVal(`${SecondVal}${oper}${FirstVal}=`);
         setHistory([...historyArray, [`${SecondVal}${oper}${FirstVal}=`, String(calcResult)]]);
@@ -173,10 +205,20 @@ const App = () => {
         case "=": calcResult = numSecondVal; break;
       }
       //фиксим 0,1 и 0,2
-      if (calcResult !== undefined) { calcResult = Number(calcResult.toFixed(16)) }
+      if (calcResult !== undefined) { 
+        calcResult = Number(calcResult.toFixed(16));
+        // debugger
+        // if (String(calcResult).includes(".")) {
+        //   let countNumbers = String(Math.trunc(calcResult)).length;
+        // calcResult = Number(calcResult.toFixed(16-countNumbers));
+        // }
+         
+      }
+
 
       if ((oper !== "") && (oper !== "=")) {
         FirstVal = `${FirstVal}${oper}${SecondVal}=`;
+
         SecondVal = String(calcResult);
         setResult(String(calcResult));
         setFirstVal(String(calcResult).concat(e.target.innerHTML));
@@ -231,7 +273,7 @@ const App = () => {
         <div className="keyboard">
           <Button  child={"C"} handleClick={clearAll} />
           <Button  child={"CE"} handleClick={clear} />
-          <Button  child={"backspace"} handleClick={backspace} />
+          <Button  child={"Backspace"} handleClick={backspace} />
           <Button  child={"/"} handleClick={operatorClick} />
           <Button  child={"7"} handleClick={handleClickNum} />
           <Button  child={"8"} handleClick={handleClickNum} />
