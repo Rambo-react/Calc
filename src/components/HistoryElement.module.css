@@ -11,12 +11,14 @@ input {
 }
 
 .historyElement {
+  height: 70px;
     border: 0px;
     margin-bottom: 10px;
     background-color: transparent;
 }
 
 .inputHistory {
+  /* font-size: 150%; */
     margin-top: 0px;
 }
 
@@ -29,4 +31,8 @@ input:active,
 button:focus,
 button:active {
   outline:none;
+}
+
+.historyElement:hover:active {
+  font-size: 90%;
 }

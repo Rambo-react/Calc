@@ -3,12 +3,13 @@
 
 * {
   font-family: 'Oswald', sans-serif;
+  font-size: 14px;
   font-size: x-large;
 }
 
 body {
   align-items: center;
-  font-size: 14px;
+  font-size:150%;
 }
 
 .App {
@@ -51,7 +52,7 @@ input {
 
 .result {
   width: 340px;
-    font-size: 150%;
+  font-size: 150%;
   }
 
 /* ====================================  KEYBOARD */

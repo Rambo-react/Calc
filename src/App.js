@@ -14,16 +14,26 @@ const App = () => {
   const [lastButtonOperator, setLastButtonOperator] = useState(false);
   const [lastButtonEqual, setLastButtonEqual] = useState(false);
 
+  const calcValues = (oper, numFirstVal, numSecondVal) => {
+    let calcResult;
+    switch (oper) {
+      case "+": calcResult = numFirstVal + numSecondVal; break;
+      case "-": calcResult = numFirstVal - numSecondVal; break;
+      case "*": calcResult = numFirstVal * numSecondVal; break;
+      case "/": calcResult = numFirstVal / numSecondVal; break;
+      case "=": calcResult = numSecondVal; break;
+    }
+    return calcResult;
+  }
 
-
-  useEffect(()=>{
-    let fn =(e) => {
-      let arrKeys = ["Backspace" , "=" , "+" , "-" , "/" , "*", "."]
-      switch(e.key) {
-        // case (Boolean(e.key.match(/[0-9]/)) && e.key) : handleClickNum(e.key); break;
-        case (Boolean(e.key.match(/[0-9]/)) && e.key) : document.getElementById(e.key).click(); break;
+  //события нажатия на клавиатуре(дублирование нажатие мышкой)
+  useEffect(() => {
+    let fn = (e) => {
+      let arrKeys = ["Backspace", "=", "+", "-", "/", "*", "."];
+      switch (e.key) {
+        case (Boolean(e.key.match(/[0-9]/)) && e.key): document.getElementById(e.key).click(); break;
         case arrKeys.some(x => x === e.key) ? e.key : false: document.getElementById(e.key).click(); break;
-        case "Enter" : document.getElementById("=").click(); break;
+        case "Enter": document.getElementById("=").click(); break;
         case "Delete": document.getElementById("C").click(); break;
         default: break;
       }
@@ -32,45 +42,30 @@ const App = () => {
     document.addEventListener('keydown', fn)
 
     return () => document.removeEventListener('keydown', fn)
-  },[])
-    
+  }, [])
+
   //цифры
   const handleClickNum = (e) => {
-    debugger 
-    
+
     if (lastButtonOperator || lastButtonEqual) {
       setResult(e)
       setLastButtonOperator(false);
       setLastButtonEqual(false);
-    } 
+    }
     else {
-      
+
       if (result === "0") {
         setResult(e);
         setLastButtonOperator(false);
         setLastButtonEqual(false);
-      } else  if (result.length<18) {
-        setResult(result.concat(e)) ;
+      } else if (result.length < 18) {
+        setResult(result.concat(e));
         setLastButtonOperator(false);
         setLastButtonEqual(false);
       }
-    
+    }
 
   }
-  //   else {
-  //     setResult((result) => {
-  //     if (result === "0") {
-  //       return e;
-  //     } else  if (result.length<18) {
-  //       return result.concat(e);
-  //     }
-  //   })
-
-  // }
-  
-
-}
-  // debugger
 
   //очистить
   const clear = () => {
@@ -90,13 +85,12 @@ const App = () => {
     if (result.length === 1) {
       setResult("0");
     } else {
-      setResult((result) => { return result.slice(0, -1)} ); // result.slice(0, result.length -1)
+      setResult((result) => { return result.slice(0, -1) }); // result.slice(0, result.length -1)
     }
   }
 
   //равно
   const calculate = (e) => {
-
 
     //если ничего нету
     if (firstVal === "") {
@@ -114,22 +108,12 @@ const App = () => {
       let oper = firstVal.slice(firstVal.length - 1, firstVal.length);
       let SecondVal = result.includes(".", result.length - 1) ? result.slice(0, -1) : result;
       let numSecondVal = Number(SecondVal);
-      switch (oper) {
-        case "+": calcResult = numFirstVal + numSecondVal; break;
-        case "-": calcResult = numFirstVal - numSecondVal; break;
-        case "*": calcResult = numFirstVal * numSecondVal; break;
-        case "/": calcResult = numFirstVal / numSecondVal; break;
-      }
-      if (calcResult !== undefined) { 
-        calcResult = Number(calcResult.toFixed(16));
-        // debugger
-        // if (String(calcResult).includes(".")) {
-        //   let countNumbers = String(Math.trunc(calcResult)).length;
-        // calcResult = Number(calcResult.toFixed(16-countNumbers));
-        // }
-         
-      }
 
+      calcResult = calcValues(oper, numFirstVal, numSecondVal);
+
+      if (calcResult !== undefined) {
+        calcResult = Number(calcResult.toFixed(16));
+      }
 
       setResult(String(calcResult));
       setFirstVal(firstVal + SecondVal + e.target.innerHTML);
@@ -156,23 +140,12 @@ const App = () => {
         let numFirstVal = Number(FirstVal);
         let SecondVal = result;
         let numSecondVal = Number(SecondVal);
+        calcResult = calcValues(oper, numFirstVal, numSecondVal);
 
-        switch (oper) {
-          case "+": calcResult = numSecondVal + numFirstVal; break;
-          case "-": calcResult = numSecondVal - numFirstVal; break;
-          case "*": calcResult = numSecondVal * numFirstVal; break;
-          case "/": calcResult = numSecondVal / numFirstVal; break;
-        }
-        if (calcResult !== undefined) { 
+        if (calcResult !== undefined) {
           calcResult = Number(calcResult.toFixed(16));
-          // debugger
-          // if (String(calcResult).includes(".")) {
-          //   let countNumbers = String(Math.trunc(calcResult)).length;
-          // calcResult = Number(calcResult.toFixed(16-countNumbers));
-          // }
-           
         }
-  
+
         setResult(String(calcResult));
         setFirstVal(`${SecondVal}${oper}${FirstVal}=`);
         setHistory([...historyArray, [`${SecondVal}${oper}${FirstVal}=`, String(calcResult)]]);
@@ -197,22 +170,11 @@ const App = () => {
       //если последняий символ разделитель дробной части, то просто откидываем его
       let SecondVal = result.includes(".", result.length - 1) ? result.slice(0, -1) : result;
       let numSecondVal = Number(SecondVal);
-      switch (oper) {
-        case "+": calcResult = numFirstVal + numSecondVal; break;
-        case "-": calcResult = numFirstVal - numSecondVal; break;
-        case "*": calcResult = numFirstVal * numSecondVal; break;
-        case "/": calcResult = numFirstVal / numSecondVal; break;
-        case "=": calcResult = numSecondVal; break;
-      }
+      calcResult = calcValues(oper, numFirstVal, numSecondVal);
+
       //фиксим 0,1 и 0,2
-      if (calcResult !== undefined) { 
+      if (calcResult !== undefined) {
         calcResult = Number(calcResult.toFixed(16));
-        // debugger
-        // if (String(calcResult).includes(".")) {
-        //   let countNumbers = String(Math.trunc(calcResult)).length;
-        // calcResult = Number(calcResult.toFixed(16-countNumbers));
-        // }
-         
       }
 
 
@@ -267,30 +229,30 @@ const App = () => {
     <div className="App">
       <div className="calculator">
         <div className="calcBlock">
-          <input className="firstVal" value={firstVal} readOnly={true}  />
-          <input className="result" value={result} readOnly={true} type="text" onKeyDown={handleClickNum}/>
+          <input className="firstVal" value={firstVal} readOnly={true} />
+          <input className="result" value={result} readOnly={true} type="text" onKeyDown={handleClickNum} />
         </div>
         <div className="keyboard">
-          <Button  child={"C"} handleClick={clearAll} />
-          <Button  child={"CE"} handleClick={clear} />
-          <Button  child={"Backspace"} handleClick={backspace} />
-          <Button  child={"/"} handleClick={operatorClick} />
-          <Button  child={"7"} handleClick={handleClickNum} />
-          <Button  child={"8"} handleClick={handleClickNum} />
-          <Button  child={"9"} handleClick={handleClickNum} />
-          <Button  child={"*"} handleClick={operatorClick} />
-          <Button  child={"4"} handleClick={handleClickNum} />
-          <Button  child={"5"} handleClick={handleClickNum} />
-          <Button  child={"6"} handleClick={handleClickNum} />
-          <Button  child={"-"} handleClick={operatorClick} />
-          <Button  child={"1"} handleClick={handleClickNum} />
-          <Button  child={"2"} handleClick={handleClickNum} />
-          <Button  child={"3"} handleClick={handleClickNum} />
-          <Button  child={"+"} handleClick={operatorClick} />
-          <Button  child={"+/-"} handleClick={plusMinus} />
-          <Button  child={"0"} handleClick={handleClickNum} />
-          <Button  child={"."} handleClick={dotButtonHandler} />
-          <Button  child={"="} handleClick={calculate} />
+          <Button child={"C"} handleClick={clearAll} />
+          <Button child={"CE"} handleClick={clear} />
+          <Button child={"Backspace"} handleClick={backspace} />
+          <Button child={"/"} handleClick={operatorClick} />
+          <Button child={"7"} handleClick={handleClickNum} />
+          <Button child={"8"} handleClick={handleClickNum} />
+          <Button child={"9"} handleClick={handleClickNum} />
+          <Button child={"*"} handleClick={operatorClick} />
+          <Button child={"4"} handleClick={handleClickNum} />
+          <Button child={"5"} handleClick={handleClickNum} />
+          <Button child={"6"} handleClick={handleClickNum} />
+          <Button child={"-"} handleClick={operatorClick} />
+          <Button child={"1"} handleClick={handleClickNum} />
+          <Button child={"2"} handleClick={handleClickNum} />
+          <Button child={"3"} handleClick={handleClickNum} />
+          <Button child={"+"} handleClick={operatorClick} />
+          <Button child={"+/-"} handleClick={plusMinus} />
+          <Button child={"0"} handleClick={handleClickNum} />
+          <Button child={"."} handleClick={dotButtonHandler} />
+          <Button child={"="} handleClick={calculate} />
         </div>
       </div>
       <div className="historyBlock">
@@ -298,8 +260,8 @@ const App = () => {
         <div className="history">
           {historyElements}
         </div>
-        {historyArray.length === 0 || <button className="clearHistory" title="Clear all history" onClick={() => { setHistory([]) }}></button> }
-      
+        {historyArray.length === 0 || <button className="clearHistory" title="Clear all history" onClick={() => { setHistory([]) }}></button>}
+
       </div>
 
     </div>
